@@ -1,0 +1,11 @@
+# Run package.json scripts through pnpm's built-in POSIX shell emulator instead
+# of the platform shell. Without this, the backslash-escaped route-group parens
+# in the tsx scripts (app/\(1-extraction\)/...) break on Windows, where pnpm
+# hands the command to cmd.exe and backslash is not an escape character.
+shellEmulator: true
+
+allowBuilds:
+  '@tailwindcss/oxide': true
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
