@@ -3,7 +3,9 @@ import {
     convertToModelMessages,
     createUIMessageStreamResponse,
     toUIMessageStream,
+    isStepCount
 } from "ai";
+import { getWeather } from "./tools";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -15,7 +17,10 @@ export async function POST(req: Request) {
         const result = streamText({
             model: "openai/gpt-5-mini", // Fast model for real-time chat (immediate streaming, low latency)
             // Reasoning models ('openai/gpt-5') would add 10-15s delay - poor UX for chat
+            instructions: "You are a helpful assistant.",
             messages: await convertToModelMessages(messages),
+            tools: { getWeather },
+            stopWhen: isStepCount(5), // ADD THIS: Enables up to 5 steps
         });
 
         return createUIMessageStreamResponse({
